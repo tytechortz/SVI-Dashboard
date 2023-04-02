@@ -254,6 +254,9 @@ def get_figure_b(selected_data, change_dropdown, var_dropdown, change, year, opa
     # # print(change_df)
         change_df['diff_var'] = change_df[var_latest] - change_df[var_old]
         print(change_df['diff_var'])
+    test_df = change_df.loc[:, ['FIPS', 'diff_var']]
+    pd.set_option('display.max_rows', None)
+    print(test_df)
     # change_columns = list(change_df)
     # # print(change_columns)
     # # change_df['diff_var']
@@ -272,7 +275,7 @@ def get_figure_b(selected_data, change_dropdown, var_dropdown, change, year, opa
     else:
         fig = go.Figure(
             go.Choroplethmapbox(geojson=gdf, 
-                locations=df_all.FIPS, 
+                locations=change_df.FIPS, 
                 z=change_df['diff_var'],
                 # colorscale="Electric",
                 # zmax = 15, 
