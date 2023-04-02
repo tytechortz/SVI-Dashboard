@@ -230,7 +230,7 @@ def get_figure_b(selected_data, dropdown, change, year, opacity):
     gdf = json.loads(f_tgdf.to_json())
 
     year_delta = year - change
-    print(year_delta)
+    # print(year_delta)
     start_df = df.loc[df['YEAR'] == year_delta]
     start_df['FIPS'] = start_df["FIPS"].astype(str)
 
@@ -239,12 +239,14 @@ def get_figure_b(selected_data, dropdown, change, year, opacity):
     
     var_latest = selection + '_x'
     var_old = selection + '_y'
-    print(var_old)
-    print(var_latest)
-    print(change_df)
+    # print(var_old)
+    # print(var_latest)
+    # print(change_df)
     change_df['diff_var'] = change_df[var_latest] - change_df[var_old]
+    change_columns = list(change_df)
+    print(change_columns)
     # change_df['diff_var']
-    print(change_df)
+    # print(change_df)
     # print(list(tgdf.columns))
 
     if selection is None:
