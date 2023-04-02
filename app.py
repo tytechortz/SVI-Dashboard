@@ -39,6 +39,8 @@ dfs = [df_SVI_2020, df_SVI_2018, df_SVI_2016]
 df = pd.concat(dfs, ignore_index=True, sort=False)
 # print(df)
 
+col_list = list(df_SVI_2020)
+
 
 def blank_fig(height):
     """
@@ -229,14 +231,19 @@ def get_figure_b(selected_data, dropdown, change, year, opacity):
 
     year_delta = year - change
     print(year_delta)
+    start_df = df.loc[df['YEAR'] == year_delta]
+    start_df['FIPS'] = start_df["FIPS"].astype(str)
 
-    change_df = df_all.loc[df_all['YEAR'] == year_delta]
+    current_df = df_all.loc[df_all['YEAR'] == year_delta]
+    change_df = current_df.merge(start_df, on='FIPS')
     
     var_latest = selection + '_x'
     var_old = selection + '_y'
+    print(var_old)
     print(var_latest)
+    print(change_df)
     change_df['diff_var'] = change_df[var_latest] - change_df[var_old]
-    change_df['diff_var']
+    # change_df['diff_var']
     print(change_df)
     # print(list(tgdf.columns))
 
