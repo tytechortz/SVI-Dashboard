@@ -1,0 +1,10 @@
+.env
+venv
+.mapbox_token
+*.csv
+data
+data/**
+/data
+.csv
+.ipynb
+.ipynb_checkpoints
