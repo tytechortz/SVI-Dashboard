@@ -37,6 +37,7 @@ df_SVI_2016['YEAR'] = 2016
 
 dfs = [df_SVI_2020, df_SVI_2018, df_SVI_2016] 
 df = pd.concat(dfs, ignore_index=True, sort=False)
+df = df.loc[df['COUNTY'] == 'Arapahoe']
 # print(df)
 
 col_list = list(df_SVI_2020)
@@ -99,7 +100,8 @@ app.layout = dbc.Container(
                         {'label': 'Pct.', 'value': 'EP_'},
                         {'label': 'Percentile', 'value': 'EPL_'},
                         {'label': 'Flag', 'value': 'F_'},
-                    ] 
+                    ],
+                    value='E_' 
                 ),
             ], width=6),
             dbc.Col([
@@ -119,6 +121,11 @@ app.layout = dbc.Container(
                     value=2,
                 ),
             ], width=6),
+            dbc.Col([
+                dcc.Dropdown(
+                    id='change-dropdown',
+                ),
+            ], width=6)
         ]),
         dbc.Row(dcc.Graph(id='ct-2016-map', figure=blank_fig(500))),
         # dbc.Row(dbc.Col(table, className="py-4")),
@@ -204,18 +211,19 @@ def get_figure(selected_data, dropdown, year, opacity):
 @app.callback(
     Output('ct-2016-map', 'figure'),
     Input('all-map-data', 'data'),
+    Input('change-dropdown', 'value'),
     Input('variable-dropdown', 'value'),
     Input('change-radio', 'value'),
     Input('year', 'value'),
     Input('opacity', 'value')
 )
-def get_figure_b(selected_data, dropdown, change, year, opacity):
+def get_figure_b(selected_data, change_dropdown, var_dropdown, change, year, opacity):
   
     df_all = pd.read_json(selected_data)
     # print(df_all)
     df_all['FIPS'] = df_all["FIPS"].astype(str)
     # print(df_all)
-    selection = dropdown
+    selection = var_dropdown
 
     print(type(selection))
     
@@ -230,29 +238,31 @@ def get_figure_b(selected_data, dropdown, change, year, opacity):
     gdf = json.loads(f_tgdf.to_json())
 
     year_delta = year - change
-    # print(year_delta)
+    print(year_delta)
     start_df = df.loc[df['YEAR'] == year_delta]
     start_df['FIPS'] = start_df["FIPS"].astype(str)
-
-    current_df = df_all.loc[df_all['YEAR'] == year_delta]
+    # print(start_df)
+    current_df = df_all.loc[df_all['YEAR'] == 2020]
+    # print(current_df)
     change_df = current_df.merge(start_df, on='FIPS')
-    
-    var_latest = selection + '_x'
-    var_old = selection + '_y'
+    print(change_df)
+    # var_latest = selection + '_y'
+    # var_old = selection + '_x'
     # print(var_old)
     # print(var_latest)
-    # print(change_df)
-    change_df['diff_var'] = change_df[var_latest] - change_df[var_old]
-    change_columns = list(change_df)
-    print(change_columns)
-    # change_df['diff_var']
-    # print(change_df)
-    # print(list(tgdf.columns))
+    # # print(change_df)
+    # change_df['diff_var'] = change_df[var_latest] - change_df[var_old]
+    # # print(change_df['diff_var'])
+    # change_columns = list(change_df)
+    # # print(change_columns)
+    # # change_df['diff_var']
+    # # print(change_df)
+    # # print(list(tgdf.columns))
 
     if selection is None:
         fig = px.choropleth_mapbox(tgdf, 
                                 geojson=tgdf.geometry, 
-                                color=selection,                               
+                                color=change_df['diff_var'],                               
                                 locations=tgdf.index, 
                                 # featureidkey="properties.TRACTCE20",
                                 opacity=opacity)
