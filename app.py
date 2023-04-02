@@ -278,8 +278,8 @@ def get_figure_b(selected_data, change_dropdown, var_dropdown, change, year, opa
                 locations=change_df.FIPS, 
                 z=change_df['diff_var'],
                 # colorscale="Electric",
-                # zmax = 15, 
-                # zmin = 0,
+                zmax = max(change_df['diff_var']),
+                zmin = -(max(change_df['diff_var'])),
                 marker_opacity=opacity, 
                 marker_line_width=.5))
     
