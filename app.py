@@ -245,24 +245,26 @@ def get_figure_b(selected_data, change_dropdown, var_dropdown, change, year, opa
     current_df = df_all.loc[df_all['YEAR'] == 2020]
     # print(current_df)
     change_df = current_df.merge(start_df, on='FIPS')
-    print(change_df)
-    # var_latest = selection + '_y'
-    # var_old = selection + '_x'
+    # print(change_df)
+    if selection is not None:
+        var_latest = selection + '_x'
+        var_old = selection + '_y'
     # print(var_old)
     # print(var_latest)
     # # print(change_df)
-    # change_df['diff_var'] = change_df[var_latest] - change_df[var_old]
-    # # print(change_df['diff_var'])
+        change_df['diff_var'] = change_df[var_latest] - change_df[var_old]
+        print(change_df['diff_var'])
     # change_columns = list(change_df)
     # # print(change_columns)
     # # change_df['diff_var']
     # # print(change_df)
     # # print(list(tgdf.columns))
+    
 
     if selection is None:
         fig = px.choropleth_mapbox(tgdf, 
                                 geojson=tgdf.geometry, 
-                                color=change_df['diff_var'],                               
+                                color=selection,                              
                                 locations=tgdf.index, 
                                 # featureidkey="properties.TRACTCE20",
                                 opacity=opacity)
@@ -271,7 +273,7 @@ def get_figure_b(selected_data, change_dropdown, var_dropdown, change, year, opa
         fig = go.Figure(
             go.Choroplethmapbox(geojson=gdf, 
                 locations=df_all.FIPS, 
-                z=df_all[selection],
+                z=change_df['diff_var'],
                 # colorscale="Electric",
                 # zmax = 15, 
                 # zmin = 0,
