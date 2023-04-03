@@ -102,33 +102,26 @@ app.layout = dbc.Container(
                     value='current' 
                 ),
             ], width=3),
-            dbc.Col([
-                html.Div(id='category-radio')
-            ], width=3),
+            # dbc.Col([
+            #     html.Div(id='select-map-radio')
+            # ], width=3),
             # dbc.Col([
             #     dcc.RadioItems(
             #         id='category-radio',
             #     ),
             # ], width=3),
-            # dbc.Col([
-            #     dcc.RadioItems(
-            #         id='category-radio',
-            #         options=[
-            #             {'label': 'Total', 'value': 'E_'},
-            #             {'label': 'Pct.', 'value': 'EP_'},
-            #             {'label': 'Percentile', 'value': 'EPL_'},
-            #             {'label': 'Flag', 'value': 'F_'},
-            #         ],
-            #         value='E_' 
-            #     ),
-            # ], width=3),
             dbc.Col([
-                dcc.Dropdown(
-                    id='variable-dropdown',
+                dcc.RadioItems(
+                    id='category-radio',
+                    options=[
+                        {'label': 'Total', 'value': 'E_'},
+                        {'label': 'Pct.', 'value': 'EP_'},
+                        {'label': 'Percentile', 'value': 'EPL_'},
+                        {'label': 'Flag', 'value': 'F_'},
+                    ],
+                    value='E_' 
                 ),
-            ], width=3)
-        ]),
-        dbc.Row([
+            ], width=3),
             dbc.Col([
                 dcc.RadioItems(
                     id='change-radio',
@@ -138,13 +131,30 @@ app.layout = dbc.Container(
                     ],
                     value=2,
                 ),
-            ], width=6),
+            ], width=3),
             dbc.Col([
                 dcc.Dropdown(
-                    id='change-dropdown',
+                    id='variable-dropdown',
                 ),
-            ], width=6)
+            ], width=3)
         ]),
+        # dbc.Row([
+        #     dbc.Col([
+        #         dcc.RadioItems(
+        #             id='change-radio',
+        #             options=[
+        #                 {'label': '2 Year Change', 'value': 2},
+        #                 {'label': '4 Year Change', 'value': 4},
+        #             ],
+        #             value=2,
+        #         ),
+        #     ], width=3),
+        #     dbc.Col([
+        #         dcc.Dropdown(
+        #             id='change-dropdown',
+        #         ),
+        #     ], width=6)
+        # ]),
         dbc.Row(dcc.Graph(id='ct-2016-map', figure=blank_fig(500))),
         # dbc.Row(dbc.Col(table, className="py-4")),
         dcc.Store(id='year-map-data', storage_type='session'),
@@ -152,40 +162,51 @@ app.layout = dbc.Container(
     ],
 )
 
-@app.callback(
-        Output('category-radio', 'children'),
-        Input('map-radio', 'value')
-)
-def category_radio_options(selected_value):
-    print(selected_value)
-    if selected_value == 'current':
-        return dbc.Col([
-        dcc.RadioItems(
-            id='category-radio',
-            options=[
-                {'label': 'Total', 'value': 'E_'},
-                {'label': 'Pct.', 'value': 'EP_'},
-                {'label': 'Percentile', 'value': 'EPL_'},
-                {'label': 'Flag', 'value': 'F_'},
-            ],
-            value='E_' 
-        ),
-    ], width=3),
-    
-    
-    
-
-
 # @app.callback(
-#         Output('variable-dropdown', 'options'),
-#         Input('category-radio', 'value')
+#         Output('select-map-radio', 'children'),
+#         Input('map-radio', 'value')
 # )
-# def category_options(selected_value):
+# def category_radio_options(selected_value):
 #     print(selected_value)
-#     # variables = list(lambda x: x, col_list)
-#     variables = [{'label': i, 'value': i} for i in list(filter(lambda x: x.startswith(selected_value), col_list))]
-#     # print([{'label': i, 'value': i} for i in col_list[filter(lambda x: x.startswith(selected_value))]])
-#     return variables 
+#     if selected_value == 'current':
+#         return dbc.Col([
+#                 dcc.RadioItems(
+#                     id='select-category-radio',
+#                     options=[
+#                         {'label': 'Total', 'value': 'E_'},
+#                         {'label': 'Pct.', 'value': 'EP_'},
+#                         {'label': 'Percentile', 'value': 'EPL_'},
+#                         {'label': 'Flag', 'value': 'F_'},
+#                     ],
+#                     value='E_' 
+#                 ),
+#             ], width=3),
+#     elif selected_value == 'change':
+#         return dbc.Col([
+#                 dcc.RadioItems(
+#                     id='change-radio',
+#                     options=[
+#                         {'label': '2 Year Change', 'value': 2},
+#                         {'label': '4 Year Change', 'value': 4},
+#                     ],
+#                     value=2,
+#                 ),
+#             ], width=3),
+    
+    
+    
+
+
+@app.callback(
+        Output('variable-dropdown', 'options'),
+        Input('category-radio', 'value')
+)
+def category_options(selected_value):
+    print(selected_value)
+    # variables = list(lambda x: x, col_list)
+    variables = [{'label': i, 'value': i} for i in list(filter(lambda x: x.startswith(selected_value), col_list))]
+    # print([{'label': i, 'value': i} for i in col_list[filter(lambda x: x.startswith(selected_value))]])
+    return variables 
 
 @app.callback(
     Output('year-map-data', 'data'),
@@ -252,13 +273,13 @@ def get_figure(selected_data, dropdown, year, opacity):
 @app.callback(
     Output('ct-2016-map', 'figure'),
     Input('all-map-data', 'data'),
-    Input('change-dropdown', 'value'),
+    # Input('change-dropdown', 'value'),
     Input('variable-dropdown', 'value'),
     Input('change-radio', 'value'),
     Input('year', 'value'),
     Input('opacity', 'value')
 )
-def get_figure_b(selected_data, change_dropdown, var_dropdown, change, year, opacity):
+def get_figure_b(selected_data, var_dropdown, change, year, opacity):
   
     df_all = pd.read_json(selected_data)
     # print(df_all)
