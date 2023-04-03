@@ -102,14 +102,6 @@ app.layout = dbc.Container(
                     value='current' 
                 ),
             ], width=3),
-            # dbc.Col([
-            #     html.Div(id='select-map-radio')
-            # ], width=3),
-            # dbc.Col([
-            #     dcc.RadioItems(
-            #         id='category-radio',
-            #     ),
-            # ], width=3),
             dbc.Col([
                 dcc.RadioItems(
                     id='category-radio',
@@ -138,23 +130,6 @@ app.layout = dbc.Container(
                 ),
             ], width=3)
         ]),
-        # dbc.Row([
-        #     dbc.Col([
-        #         dcc.RadioItems(
-        #             id='change-radio',
-        #             options=[
-        #                 {'label': '2 Year Change', 'value': 2},
-        #                 {'label': '4 Year Change', 'value': 4},
-        #             ],
-        #             value=2,
-        #         ),
-        #     ], width=3),
-        #     dbc.Col([
-        #         dcc.Dropdown(
-        #             id='change-dropdown',
-        #         ),
-        #     ], width=6)
-        # ]),
         dbc.Row(dcc.Graph(id='ct-2016-map', figure=blank_fig(500))),
         # dbc.Row(dbc.Col(table, className="py-4")),
         dcc.Store(id='year-map-data', storage_type='session'),
@@ -162,40 +137,8 @@ app.layout = dbc.Container(
     ],
 )
 
-# @app.callback(
-#         Output('select-map-radio', 'children'),
-#         Input('map-radio', 'value')
-# )
-# def category_radio_options(selected_value):
-#     print(selected_value)
-#     if selected_value == 'current':
-#         return dbc.Col([
-#                 dcc.RadioItems(
-#                     id='select-category-radio',
-#                     options=[
-#                         {'label': 'Total', 'value': 'E_'},
-#                         {'label': 'Pct.', 'value': 'EP_'},
-#                         {'label': 'Percentile', 'value': 'EPL_'},
-#                         {'label': 'Flag', 'value': 'F_'},
-#                     ],
-#                     value='E_' 
-#                 ),
-#             ], width=3),
-#     elif selected_value == 'change':
-#         return dbc.Col([
-#                 dcc.RadioItems(
-#                     id='change-radio',
-#                     options=[
-#                         {'label': '2 Year Change', 'value': 2},
-#                         {'label': '4 Year Change', 'value': 4},
-#                     ],
-#                     value=2,
-#                 ),
-#             ], width=3),
-    
-    
-    
 
+    
 
 @app.callback(
         Output('variable-dropdown', 'options'),
@@ -311,19 +254,10 @@ def get_figure_b(selected_data, var_dropdown, change, year, opacity):
     if selection is not None:
         var_latest = selection + '_x'
         var_old = selection + '_y'
-    # print(var_old)
-    # print(var_latest)
-    # # print(change_df)
+   
         change_df['diff_var'] = change_df[var_latest] - change_df[var_old]
         print(change_df['diff_var'])
-    # test_df = change_df.loc[:, ['FIPS', 'diff_var']]
-    # pd.set_option('display.max_rows', None)
-    # print(test_df)
-    # change_columns = list(change_df)
-    # # print(change_columns)
-    # # change_df['diff_var']
-    # # print(change_df)
-    # # print(list(tgdf.columns))
+    
     
 
     if selection is None:
