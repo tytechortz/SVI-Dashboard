@@ -103,10 +103,13 @@ app.layout = dbc.Container(
                 ),
             ], width=3),
             dbc.Col([
-                dcc.RadioItems(
-                    id='category-radio',
-                ),
+                html.Div(id='category-radio')
             ], width=3),
+            # dbc.Col([
+            #     dcc.RadioItems(
+            #         id='category-radio',
+            #     ),
+            # ], width=3),
             # dbc.Col([
             #     dcc.RadioItems(
             #         id='category-radio',
@@ -150,15 +153,27 @@ app.layout = dbc.Container(
 )
 
 @app.callback(
-        Output('variable-dropdown', 'options'),
-        Input('category-radio', 'value')
+        Output('category-radio', 'children'),
+        Input('map-radio', 'value')
 )
-def category_options(selected_value):
+def category_radio_options(selected_value):
     print(selected_value)
-    # variables = list(lambda x: x, col_list)
-    variables = [{'label': i, 'value': i} for i in list(filter(lambda x: x.startswith(selected_value), col_list))]
-    # print([{'label': i, 'value': i} for i in col_list[filter(lambda x: x.startswith(selected_value))]])
-    return variables 
+    if selected_value == 'current':
+        return dbc.Col([
+        dcc.RadioItems(
+            id='category-radio',
+            options=[
+                {'label': 'Total', 'value': 'E_'},
+                {'label': 'Pct.', 'value': 'EP_'},
+                {'label': 'Percentile', 'value': 'EPL_'},
+                {'label': 'Flag', 'value': 'F_'},
+            ],
+            value='E_' 
+        ),
+    ], width=3),
+    
+    
+    
 
 
 # @app.callback(
