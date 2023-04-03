@@ -94,6 +94,16 @@ app.layout = dbc.Container(
         dbc.Row([
             dbc.Col([
                 dcc.RadioItems(
+                    id='map-radio',
+                    options=[
+                        {'label': 'Current Data', 'value': 'current'},
+                        {'label': 'Change Data', 'value': 'change'},
+                    ],
+                    value='current' 
+                ),
+            ], width=3),
+            dbc.Col([
+                dcc.RadioItems(
                     id='category-radio',
                     options=[
                         {'label': 'Total', 'value': 'E_'},
@@ -103,12 +113,12 @@ app.layout = dbc.Container(
                     ],
                     value='E_' 
                 ),
-            ], width=6),
+            ], width=3),
             dbc.Col([
                 dcc.Dropdown(
                     id='variable-dropdown',
                 ),
-            ], width=6)
+            ], width=3)
         ]),
         dbc.Row([
             dbc.Col([
